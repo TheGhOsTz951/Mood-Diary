@@ -1,5 +1,7 @@
 package com.sasso.mood_diary.ui.home;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -10,27 +12,24 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.sasso.mood_diary.R;
 
 import java.util.Locale;
 
 public class HomeFragment extends Fragment {
-    private static final long START_TIME_IN_MILLIS = 20000;
+    private static final long START_TIME_IN_MILLIS = 21000;
     private static final int DIV_PROGRESS_BAR = 50;
 
     private TextView txtCont;
-    private TextView txtTest;
     private Button btnStart;
     private ProgressBar progressBar;
 
     private CountDownTimer mCountDownTimer;
     private boolean mTimeRunning;
     private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
+    private long mEndTime;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -40,7 +39,6 @@ public class HomeFragment extends Fragment {
         progressBar = view.findViewById(R.id.progress_bar);
         btnStart = view.findViewById(R.id.btnStart);
         txtCont = view.findViewById(R.id.txtCont);
-        txtTest = view.findViewById(R.id.txtTest);
 
         progressBar.setMax((int) START_TIME_IN_MILLIS / DIV_PROGRESS_BAR);
 
@@ -48,10 +46,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (mTimeRunning) {
-                    restartTimer();
                 } else {
                     mTimeLeftInMillis = START_TIME_IN_MILLIS;
                     startTimer();
+                    updateVisual();
                 }
             }
         });
@@ -60,30 +58,48 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putLong("millisLeft", mTimeLeftInMillis);
-        outState.putBoolean("timerRunning", mTimeRunning);
+    public void onStop() {
+        super.onStop();
+
+        SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putLong("millisLeft", mTimeLeftInMillis);
+        editor.putBoolean("timerRunning", mTimeRunning);
+        editor.putLong("endTime", mEndTime);
+
+        editor.apply();
+
+        if (mTimeRunning) mCountDownTimer.cancel();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onStart() {
+        super.onStart();
 
-        if (savedInstanceState != null) {
-            mTimeLeftInMillis = savedInstanceState.getLong("millisLeft");
-            mTimeRunning = savedInstanceState.getBoolean("timerRunning");
+        SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
 
-            updateCountDownText();
-            updateProgressBar();
+        mTimeLeftInMillis = prefs.getLong("millisLeft", START_TIME_IN_MILLIS);
+        mTimeRunning = prefs.getBoolean("timerRunning", false);
 
-            if (mTimeRunning){
+        if (mTimeRunning) {
+            mEndTime = prefs.getLong("endTime", 0);
+            mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
+
+            if (mTimeLeftInMillis < 0) {
+                mTimeLeftInMillis = 0;
+                mTimeRunning = false;
+            } else {
                 startTimer();
             }
         }
+
+        updateVisual();
     }
 
     private void startTimer() {
+        mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
+
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 50) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -96,16 +112,11 @@ public class HomeFragment extends Fragment {
             public void onFinish() {
                 mTimeRunning = false;
                 txtCont.setText("End");
+                updateVisual();
             }
         }.start();
 
         mTimeRunning = true;
-    }
-
-    private void restartTimer() {
-        mCountDownTimer.cancel();
-        mTimeLeftInMillis = START_TIME_IN_MILLIS;
-        startTimer();
     }
 
     private void updateCountDownText() {
@@ -120,5 +131,13 @@ public class HomeFragment extends Fragment {
     private void updateProgressBar() {
         int progress = (int) ((START_TIME_IN_MILLIS / DIV_PROGRESS_BAR) - (mTimeLeftInMillis / DIV_PROGRESS_BAR));
         progressBar.setProgress(progress);
+    }
+
+    private void updateVisual() {
+        if (mTimeRunning) {
+            btnStart.setVisibility(View.INVISIBLE);
+        } else {
+            btnStart.setVisibility(View.VISIBLE);
+        }
     }
 }
