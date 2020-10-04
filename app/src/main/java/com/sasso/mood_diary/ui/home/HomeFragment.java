@@ -66,7 +66,6 @@ public class HomeFragment extends Fragment {
         outState.putBoolean("timerRunning", mTimeRunning);
     }
 
-    /*
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
@@ -74,14 +73,13 @@ public class HomeFragment extends Fragment {
         mTimeLeftInMillis = savedInstanceState.getLong("millisLeft");
         mTimeRunning = savedInstanceState.getBoolean("timerRunning");
 
-        updateCountDownText();
-        updateProgressBar();
+        //updateCountDownText();
+        //updateProgressBar();
 
         if (mTimeRunning){
             startTimer();
         }
     }
-    */
 
     private void startTimer() {
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 50) {
