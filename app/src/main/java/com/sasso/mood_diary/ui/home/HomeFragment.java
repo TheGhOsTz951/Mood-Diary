@@ -67,17 +67,19 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-        mTimeLeftInMillis = savedInstanceState.getLong("millisLeft");
-        mTimeRunning = savedInstanceState.getBoolean("timerRunning");
+        if (savedInstanceState != null) {
+            mTimeLeftInMillis = savedInstanceState.getLong("millisLeft");
+            mTimeRunning = savedInstanceState.getBoolean("timerRunning");
 
-        //updateCountDownText();
-        //updateProgressBar();
+            updateCountDownText();
+            updateProgressBar();
 
-        if (mTimeRunning){
-            startTimer();
+            if (mTimeRunning){
+                startTimer();
+            }
         }
     }
 
