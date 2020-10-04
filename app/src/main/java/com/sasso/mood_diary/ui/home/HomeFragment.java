@@ -82,7 +82,6 @@ public class HomeFragment extends Fragment {
             startTimer();
         }
     }
-    porcodio
     */
 
     private void startTimer() {
