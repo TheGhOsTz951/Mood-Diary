@@ -113,6 +113,7 @@ public class HomeFragment extends Fragment {
                 mTimeRunning = false;
                 txtCont.setText("End");
                 updateVisual();
+                mCountDownTimer.cancel();
             }
         }.start();
 
