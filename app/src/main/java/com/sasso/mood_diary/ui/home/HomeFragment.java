@@ -2,6 +2,7 @@ package com.sasso.mood_diary.ui.home;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -10,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.sasso.mood_diary.R;
@@ -34,13 +35,20 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
+
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         progressBar = view.findViewById(R.id.progress_bar);
         btnStart = view.findViewById(R.id.btnStart);
         txtCont = view.findViewById(R.id.txtCont);
-
+        ConstraintLayout constraintLayout = view.findViewById(R.id.layout);
+        AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
+        animationDrawable .setEnterFadeDuration(2000);
+        animationDrawable.setExitFadeDuration(4000);
+        animationDrawable.start();
+        
         progressBar.setMax((int) START_TIME_IN_MILLIS / DIV_PROGRESS_BAR);
+
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +80,7 @@ public class HomeFragment extends Fragment {
 
         if (mTimeRunning) mCountDownTimer.cancel();
     }
+
 
     @Override
     public void onStart() {
@@ -137,8 +146,13 @@ public class HomeFragment extends Fragment {
     private void updateVisual() {
         if (mTimeRunning) {
             btnStart.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            txtCont.setVisibility(View.VISIBLE);
         } else {
             btnStart.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+            txtCont.setVisibility(View.INVISIBLE);
         }
     }
+
 }
