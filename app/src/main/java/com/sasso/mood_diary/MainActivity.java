@@ -30,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    //FIXME: Aggiungere un fix per quando si preme il pulsante della pagina in cui ci si trova
+    // Non deve modificare il fragment visualizzato
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
