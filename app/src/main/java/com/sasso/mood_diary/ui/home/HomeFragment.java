@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
         animationDrawable .setEnterFadeDuration(2000);
         animationDrawable.setExitFadeDuration(4000);
         animationDrawable.start();
-        
+
         progressBar.setMax((int) START_TIME_IN_MILLIS / DIV_PROGRESS_BAR);
 
 
