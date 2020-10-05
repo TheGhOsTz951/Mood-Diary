@@ -137,8 +137,12 @@ public class HomeFragment extends Fragment {
     private void updateVisual() {
         if (mTimeRunning) {
             btnStart.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            txtCont.setVisibility(View.VISIBLE);
         } else {
             btnStart.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+            txtCont.setVisibility(View.INVISIBLE);
         }
     }
 }
