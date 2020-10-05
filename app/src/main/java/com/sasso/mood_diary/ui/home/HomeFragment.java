@@ -43,7 +43,7 @@ public class HomeFragment extends Fragment {
         txtCont = view.findViewById(R.id.txtCont);
         ConstraintLayout constraintLayout = view.findViewById(R.id.layout);
         AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
-        animationDrawable .setEnterFadeDuration(2000);
+        animationDrawable.setEnterFadeDuration(2000);
         animationDrawable.setExitFadeDuration(4000);
         animationDrawable.start();
 

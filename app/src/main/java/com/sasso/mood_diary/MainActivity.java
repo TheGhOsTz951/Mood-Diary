@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.MenuItem;
-import android.view.Window;
 import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //FIXME: Aggiungere un fix per quando si preme il pulsante della pagina in cui ci si trova
-    // Non deve modificare il fragment visualizzato
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -54,8 +51,22 @@ public class MainActivity extends AppCompatActivity {
                             break;
                     }
 
-                    getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                            selectedFragment).commit();
+                    // Prende il fragment attualmente visualizzato
+                    Fragment temp = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+
+                    // Se il fragment da cambiare e' uguale a quello visibile returna
+                    try {
+                        if (temp.getClass().toString().equals(selectedFragment.getClass().toString())) return true;
+                    } catch (Exception ignored){}
+
+                    // TODO: Aggiungere parte codice in caso di errore
+                    //  IDEA: Mostrare messaggio di errore con richiesta di ripetere l'azione
+                    // Cambia il fragment attuale con quello selezionato
+                    try {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                                selectedFragment).commit();
+                    } catch (Exception ignored){}
+
                     return true;
                 }
             };
