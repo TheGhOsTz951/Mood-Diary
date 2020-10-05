@@ -32,6 +32,9 @@ public class HomeFragment extends Fragment {
     private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
     private long mEndTime;
 
+    // TODO: Provare a cambiarela progressbar in modo tale che usi un animazione e non il timer per migliorare le prestazioni
+    //  IDEA: Animazione dura mTimeLeftInMillis
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -48,7 +51,6 @@ public class HomeFragment extends Fragment {
         animationDrawable.start();
 
         progressBar.setMax((int) START_TIME_IN_MILLIS / DIV_PROGRESS_BAR);
-
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
