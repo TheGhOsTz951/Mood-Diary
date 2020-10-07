@@ -1,13 +1,19 @@
 package com.sasso.mood_diary.ui.home;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,6 +32,7 @@ public class HomeFragment extends Fragment {
     private TextView txtCont;
     private Button btnStart;
     private ProgressBar progressBar;
+    private Dialog formPopup;
 
     private CountDownTimer mCountDownTimer;
     private boolean mTimeRunning;
@@ -39,11 +46,12 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
 
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        final View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         progressBar = view.findViewById(R.id.progress_bar);
         btnStart = view.findViewById(R.id.btnStart);
         txtCont = view.findViewById(R.id.txtCont);
+        formPopup = new Dialog(view.getContext());
         ConstraintLayout constraintLayout = view.findViewById(R.id.layout);
         AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
         animationDrawable.setEnterFadeDuration(2000);
@@ -55,8 +63,25 @@ public class HomeFragment extends Fragment {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mTimeRunning) {
-                } else {
+                showPopup();
+            }
+        });
+
+        return view;
+    }
+
+    private void showPopup() {
+        View view = getLayoutInflater().inflate(R.layout.form_popup, null);
+        formPopup.setContentView(view);
+
+        Button btnConfirm = view.findViewById(R.id.btnPop);
+
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                formPopup.dismiss();
+
+                if (!mTimeRunning) {
                     mTimeLeftInMillis = START_TIME_IN_MILLIS;
                     startTimer();
                     updateVisual();
@@ -64,7 +89,17 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        return view;
+        // TODO: Fixare grandezza e posizione form popup
+        formPopup.show();
+
+        WindowManager.LayoutParams wlp = formPopup.getWindow().getAttributes();
+        wlp.gravity = Gravity.TOP;
+        wlp.height = 1200;
+        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+
+        //wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND; Rimuove background opacita
+
+        formPopup.getWindow().setAttributes(wlp);
     }
 
     @Override
@@ -82,7 +117,6 @@ public class HomeFragment extends Fragment {
 
         if (mTimeRunning) mCountDownTimer.cancel();
     }
-
 
     @Override
     public void onStart() {
