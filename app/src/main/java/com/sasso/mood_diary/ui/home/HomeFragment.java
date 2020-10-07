@@ -122,7 +122,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFinish() {
                 mTimeRunning = false;
-                txtCont.setText("End");
                 updateVisual();
                 mCountDownTimer.cancel();
             }
@@ -147,13 +146,11 @@ public class HomeFragment extends Fragment {
 
     private void updateVisual() {
         if (mTimeRunning) {
-            btnStart.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-            txtCont.setVisibility(View.VISIBLE);
+            btnStart.setEnabled(false);
         } else {
-            btnStart.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.INVISIBLE);
-            txtCont.setVisibility(View.INVISIBLE);
+            btnStart.setEnabled(true);
+            progressBar.setProgress(0);
+            txtCont.setText("00:00");
         }
     }
 
