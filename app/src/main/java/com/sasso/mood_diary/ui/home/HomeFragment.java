@@ -3,12 +3,9 @@ package com.sasso.mood_diary.ui.home;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,16 +86,17 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // TODO: Fixare grandezza e posizione form popup
         formPopup.show();
+
+        // Imposta il layout del popup
+        int[] coordinate = new int[2];
+        btnStart.getLocationInWindow(coordinate);
 
         WindowManager.LayoutParams wlp = formPopup.getWindow().getAttributes();
         wlp.gravity = Gravity.TOP;
-        wlp.height = 1200;
+        wlp.height = coordinate[1];
         wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
-
         //wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND; Rimuove background opacita
-
         formPopup.getWindow().setAttributes(wlp);
     }
 
