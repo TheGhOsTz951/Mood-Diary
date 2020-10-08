@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNav = findViewById(R.id.nav_view);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
+        bottomNav.setItemIconTintList(null);
 
         //When app start it shows the home page
         if (savedInstanceState == null) {
