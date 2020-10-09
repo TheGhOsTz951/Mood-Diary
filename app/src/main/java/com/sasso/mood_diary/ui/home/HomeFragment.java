@@ -21,14 +21,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.Observer;
 
+import com.sasso.mood_diary.LiveData;
 import com.sasso.mood_diary.R;
 import com.sasso.mood_diary.ui.home.formPages.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Observable;
 
 public class HomeFragment extends Fragment {
     private static final long START_TIME_IN_MILLIS = 21000;
@@ -37,6 +40,7 @@ public class HomeFragment extends Fragment {
     private TextView txtCont;
     private Button btnStart;
     private ProgressBar progressBar;
+    private LiveData liveData;
 
     private CountDownTimer mCountDownTimer;
     private boolean mTimeRunning;
@@ -74,20 +78,19 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        // LiveData code
+        liveData = new ViewModelProvider(requireActivity()).get(LiveData.class);
+
+        liveData.getBtnConfirmClick().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
-            public void onReceive(Context context, Intent intent) {
-                String action = intent.getAction();
-                if (action.equals("startTimer")){
-                    if (!mTimeRunning) {
-                        mTimeLeftInMillis = START_TIME_IN_MILLIS;
-                        startTimer();
-                        updateVisual();
-                    }
+            public void onChanged(String s) {
+                if (!mTimeRunning) {
+                    mTimeLeftInMillis = START_TIME_IN_MILLIS;
+                    startTimer();
+                    updateVisual();
                 }
             }
-        };
-        getContext().registerReceiver(broadcastReceiver, new IntentFilter("startTimer"));
+        });
 
         return view;
     }

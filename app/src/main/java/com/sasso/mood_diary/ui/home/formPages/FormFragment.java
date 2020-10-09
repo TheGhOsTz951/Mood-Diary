@@ -1,24 +1,20 @@
 package com.sasso.mood_diary.ui.home.formPages;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
+import com.sasso.mood_diary.LiveData;
 import com.sasso.mood_diary.R;
 
 import java.util.ArrayList;
@@ -27,6 +23,7 @@ import java.util.List;
 public class FormFragment extends DialogFragment {
     private ViewPager formPager;
     private FormPagerAdapter formPagerAdapter;
+    private LiveData liveData;
 
     private int yAxis;
 
@@ -48,17 +45,16 @@ public class FormFragment extends DialogFragment {
         formPagerAdapter = new FormPagerAdapter(getChildFragmentManager(), fragmentList);
         formPager.setAdapter(formPagerAdapter);
 
-        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        // LiveData code
+        liveData = new ViewModelProvider(requireActivity()).get(LiveData.class);
+
+        liveData.getBtnConfirmClick().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
-            public void onReceive(Context context, Intent intent) {
-                String action = intent.getAction();
-                if (action.equals("closeForm")){
-                    dismiss();
-                }
+            public void onChanged(String s) {
+                dismiss();
             }
-        };
-        getContext().registerReceiver(broadcastReceiver, new IntentFilter("closeForm"));
-        
+        });
+
         return view;
     }
 

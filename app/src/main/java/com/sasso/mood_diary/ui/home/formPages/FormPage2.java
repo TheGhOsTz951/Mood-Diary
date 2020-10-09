@@ -12,11 +12,14 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.sasso.mood_diary.LiveData;
 import com.sasso.mood_diary.R;
 
 public class FormPage2 extends Fragment {
     private Button btnConfirm;
+    private LiveData liveData;
 
     @Nullable
     @Override
@@ -25,14 +28,12 @@ public class FormPage2 extends Fragment {
 
         btnConfirm = view.findViewById(R.id.btnConfirm);
 
+        liveData = new ViewModelProvider(requireActivity()).get(LiveData.class);
+
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent("closeForm");
-                getContext().sendBroadcast(intent);
-
-                intent.setAction("startTimer");
-                getContext().sendBroadcast(intent);
+                liveData.setBtnConfirmClick("");
             }
         });
 
