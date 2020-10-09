@@ -1,7 +1,10 @@
 package com.sasso.mood_diary.ui.home;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -70,6 +73,21 @@ public class HomeFragment extends Fragment {
                 new FormFragment(coordinate[1]).show(getChildFragmentManager(), "");
             }
         });
+
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (action.equals("startTimer")){
+                    if (!mTimeRunning) {
+                        mTimeLeftInMillis = START_TIME_IN_MILLIS;
+                        startTimer();
+                        updateVisual();
+                    }
+                }
+            }
+        };
+        getContext().registerReceiver(broadcastReceiver, new IntentFilter("startTimer"));
 
         return view;
     }

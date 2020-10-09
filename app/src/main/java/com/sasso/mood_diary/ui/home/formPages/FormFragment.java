@@ -1,11 +1,18 @@
 package com.sasso.mood_diary.ui.home.formPages;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,6 +48,17 @@ public class FormFragment extends DialogFragment {
         formPagerAdapter = new FormPagerAdapter(getChildFragmentManager(), fragmentList);
         formPager.setAdapter(formPagerAdapter);
 
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (action.equals("closeForm")){
+                    dismiss();
+                }
+            }
+        };
+        getContext().registerReceiver(broadcastReceiver, new IntentFilter("closeForm"));
+        
         return view;
     }
 
