@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +18,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.sasso.mood_diary.R;
+import com.sasso.mood_diary.ui.home.formPages.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class HomeFragment extends Fragment {
@@ -29,7 +34,6 @@ public class HomeFragment extends Fragment {
     private TextView txtCont;
     private Button btnStart;
     private ProgressBar progressBar;
-    private Dialog formPopup;
 
     private CountDownTimer mCountDownTimer;
     private boolean mTimeRunning;
@@ -43,12 +47,12 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
 
-        final View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         progressBar = view.findViewById(R.id.progress_bar);
         btnStart = view.findViewById(R.id.btnStart);
         txtCont = view.findViewById(R.id.txtCont);
-        formPopup = new Dialog(view.getContext());
+
         ConstraintLayout constraintLayout = view.findViewById(R.id.layout);
         AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
         animationDrawable.setEnterFadeDuration(2000);
@@ -60,44 +64,14 @@ public class HomeFragment extends Fragment {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopup();
+                int[] coordinate = new int[2];
+                btnStart.getLocationInWindow(coordinate);
+
+                new FormFragment(coordinate[1]).show(getChildFragmentManager(), "");
             }
         });
 
         return view;
-    }
-
-    private void showPopup() {
-        View view = getLayoutInflater().inflate(R.layout.form_popup, null);
-        formPopup.setContentView(view);
-
-        Button btnConfirm = view.findViewById(R.id.btnPop);
-
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                formPopup.dismiss();
-
-                if (!mTimeRunning) {
-                    mTimeLeftInMillis = START_TIME_IN_MILLIS;
-                    startTimer();
-                    updateVisual();
-                }
-            }
-        });
-
-        formPopup.show();
-
-        // Imposta il layout del popup
-        int[] coordinate = new int[2];
-        btnStart.getLocationInWindow(coordinate);
-
-        WindowManager.LayoutParams wlp = formPopup.getWindow().getAttributes();
-        wlp.gravity = Gravity.TOP;
-        wlp.height = coordinate[1];
-        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        //wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND; Rimuove background opacita
-        formPopup.getWindow().setAttributes(wlp);
     }
 
     @Override
