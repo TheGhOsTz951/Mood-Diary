@@ -1,5 +1,7 @@
 package com.sasso.mood_diary.ui.dashboard;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,9 +18,13 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.sasso.mood_diary.R;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.Random;
 
 public class DashboardFragment extends Fragment {
+    final String FILE_NAME = "data.txt";
 
     private Button button;
     private TextView textView;
@@ -41,5 +47,37 @@ public class DashboardFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        readPref();
+    }
+
+    // Al momento inutilizzato
+    private void loadFile() {
+        FileInputStream fileInputStream = null;
+
+        try {
+            fileInputStream = getContext().openFileInput(FILE_NAME);
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+            String test = bufferedReader.readLine();
+
+            if (test != null) {
+                textView.setText("Sei " + test + " depresso!");
+            }
+
+            fileInputStream.close();
+        } catch (Exception e){}
+    }
+
+    private void readPref() {
+        SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+
+        textView.setText("Sei " + prefs.getInt("test", 0) + " depresso!");
     }
 }
