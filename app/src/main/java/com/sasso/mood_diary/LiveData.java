@@ -4,13 +4,13 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class LiveData extends ViewModel {
-    private MutableLiveData<String> btnConfirmClick = new MutableLiveData<String>();
+    private MutableLiveData<Boolean> btnConfirmClick = new MutableLiveData<Boolean>();
 
-    public void setBtnConfirmClick(String t) {
+    public void setBtnConfirmClick(Boolean t) {
         btnConfirmClick.setValue(t);
     }
 
-    public MutableLiveData<String> getBtnConfirmClick() {
+    public MutableLiveData<Boolean> getBtnConfirmClick() {
         return btnConfirmClick;
     }
 }

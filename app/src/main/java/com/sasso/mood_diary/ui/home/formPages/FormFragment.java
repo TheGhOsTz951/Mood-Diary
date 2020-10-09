@@ -48,10 +48,13 @@ public class FormFragment extends DialogFragment {
         // LiveData code
         liveData = new ViewModelProvider(requireActivity()).get(LiveData.class);
 
-        liveData.getBtnConfirmClick().observe(getViewLifecycleOwner(), new Observer<String>() {
+        liveData.getBtnConfirmClick().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
-            public void onChanged(String s) {
-                dismiss();
+            public void onChanged(Boolean s) {
+                if (liveData.getBtnConfirmClick().getValue()) {
+                    dismiss();
+                    liveData.setBtnConfirmClick(false);
+                }
             }
         });
 

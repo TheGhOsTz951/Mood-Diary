@@ -81,10 +81,10 @@ public class HomeFragment extends Fragment {
         // LiveData code
         liveData = new ViewModelProvider(requireActivity()).get(LiveData.class);
 
-        liveData.getBtnConfirmClick().observe(getViewLifecycleOwner(), new Observer<String>() {
+        liveData.getBtnConfirmClick().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
-            public void onChanged(String s) {
-                if (!mTimeRunning) {
+            public void onChanged(Boolean s) {
+                if (!mTimeRunning && liveData.getBtnConfirmClick().getValue()) {
                     mTimeLeftInMillis = START_TIME_IN_MILLIS;
                     startTimer();
                     updateVisual();

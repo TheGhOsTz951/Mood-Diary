@@ -33,7 +33,7 @@ public class FormPage2 extends Fragment {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                liveData.setBtnConfirmClick("");
+                liveData.setBtnConfirmClick(true);
             }
         });
 
