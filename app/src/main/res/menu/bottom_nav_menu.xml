@@ -4,18 +4,18 @@
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/home_selector"
-        android:title="@string/title_home"
+        android:title="Casa"
 
         />
 
     <item
         android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:icon="@drawable/lock_selector"
+        android:title="Dati" />
 
     <item
         android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:icon="@drawable/option_selector"
+        android:title="Menu" />
 
 </menu>
